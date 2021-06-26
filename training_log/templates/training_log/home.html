@@ -1,0 +1,16 @@
+{% extends "training_log/base.html" %}
+{% block content %}
+    {% for log in logs %}
+        <article class="media content-section">
+          <img src="{{ log.author.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ log.session_type }}</a>
+              <small class="text-muted">{{ log.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ log.session_type }}</a></h2>
+            <p class="article-content">{{ log.exercises.name }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
