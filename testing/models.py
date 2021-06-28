@@ -1,6 +1,6 @@
 from django.db import models
-from training_log.models import SessionType, Exercise
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 
