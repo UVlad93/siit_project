@@ -22,7 +22,7 @@ def log_test(request):
 class LineChartJSONView(BaseLineChartView):
     def get_labels(self):
         dates = []
-        qs = TestingSession.objects.all()
+        qs = TestingSession.objects.filter(author=self.request.user)
         for test in qs:
             dates.append(test.date_logged)
         return dates    

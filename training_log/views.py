@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from .models import SessionType, TrainingLog, Exercise
 from django.contrib import messages
 from django import forms
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def home(request):
     ctxt = {
-        'logs': TrainingLog.objects.all()
+        'logs': TrainingLog.objects.filter(author=request.user)
     }
     return render(request, 'training_log/home.html', ctxt)
 
@@ -35,14 +37,18 @@ def log_details(request):
 
     if request.method == 'POST':
         form = TrainingLogCompleteForm(request.POST)
-        if form.is_valid():
-            #session_type = SessionType.objects.get(name=request.session['session_type'])
+        if form.is_valid():            
+            session_type = SessionType.objects.get(name=request.session['session_type'])
             exs = form.cleaned_data['exercises']
-            form.fields['exercises']=exs
-            form.instance.author = request.user
             date_posted = form.cleaned_data['date_posted']
-            #tlog= TrainingLog.objects.create(session_type=session_type, date_posted=date_posted)
-
+            comments = form.cleaned_data['comments']
+            tlog = TrainingLog.objects.create(session_type=session_type, comments=comments, 
+                                            date_posted=date_posted, author=request.user)                                
+            for ex in exs:
+                obj, created = Exercise.objects.get_or_create(name=ex)
+                tlog.exercises.add(obj)
+            tlog.save()
+            print(tlog.exercises.name)
             messages.success(request, 'Your training session has been added to your logbook') 
             return redirect('home') 
     else:

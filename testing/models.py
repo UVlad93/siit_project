@@ -10,6 +10,7 @@ class TestingSession(models.Model):
     pu_maw = models.IntegerField(help_text='Maximum Added Weight Pull Up (in kg)')
     fl = models.IntegerField(help_text='Maximum Front Lever Hold (in seconds)')
     date_logged = models.DateField(default=timezone.now, help_text='Date Logged')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.name}: {self.mh_maw}, {self.pu_maw}, {self.fl}- {self.date_logged}"

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -20,8 +21,8 @@ class TrainingLog(models.Model):
     session_type = models.ForeignKey(SessionType, on_delete=models.CASCADE, null=True)
     exercises = models.ManyToManyField(Exercise)
     comments = models.TextField(max_length=500)
-    date_posted = models.DateField(blank=True)
+    date_posted = models.DateField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.session_type}- {self.date_posted}- {self.exercises}"
+        return f"{self.session_type}- {self.date_posted}- {self.exercises.name}"
