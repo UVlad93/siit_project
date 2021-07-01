@@ -6,6 +6,8 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+def about(request):
+    return render (request, 'training_log/about.html')
 
 @login_required
 def home(request):
