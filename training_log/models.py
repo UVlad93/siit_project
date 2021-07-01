@@ -25,4 +25,5 @@ class TrainingLog(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.session_type}- {self.date_posted}- {self.exercises.name}"
+        exercises = ', '.join(str(ex) for ex in self.exercises.all())
+        return f"{self.session_type}- {self.date_posted}- {exercises}"

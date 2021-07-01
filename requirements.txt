@@ -1,0 +1,4 @@
+django_chartjs==2.2.1
+Django==3.2.4
+chartjs==1.2
+python-decouple==3.4

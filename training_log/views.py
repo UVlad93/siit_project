@@ -45,12 +45,10 @@ def log_details(request):
             tlog = TrainingLog.objects.create(session_type=session_type, comments=comments, 
                                             date_posted=date_posted, author=request.user)                                
             for ex in exs:
-                obj, created = Exercise.objects.get_or_create(name=ex)
+                obj = Exercise.objects.get(name=str(ex))
                 print(obj)
                 tlog.exercises.add(obj)
-                print(tlog.exercises)
             tlog.save()
-            print(tlog.exercises)
             messages.success(request, 'Your training session has been added to your logbook') 
             return redirect('home') 
     else:
