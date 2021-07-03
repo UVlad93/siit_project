@@ -1,9 +1,12 @@
+from django.views.generic.edit import DeleteView, UpdateView
 from .forms import TrainingLogCompleteForm, TrainingLogSessionForm
 from django.shortcuts import render, redirect
 from .models import SessionType, TrainingLog, Exercise
 from django.contrib import messages
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import DetailView
 
 # Create your views here.
 def about(request):
@@ -55,7 +58,38 @@ def log_details(request):
             return redirect('home') 
     else:
         form = TrainingLogCompleteForm()
-    return render(request, 'training_log/log_details.html', {'form':form})                                       
+    return render(request, 'training_log/log_details.html', {'form':form}) 
+
+
+class TrainingLogDetail(LoginRequiredMixin, DetailView):
+    model = TrainingLog
+
+
+class TrainingLogUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = TrainingLog
+    fields = ['comments', 'date_posted']
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        log = self.get_object()
+        if self.request.user == log.author:
+            return True
+        return False  
+
+class TrainingLogDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model =  TrainingLog
+    success_url = '/'
+
+    def test_func(self):
+        log = self.get_object()
+        if self.request.user == log.author:
+            return True
+        return False    
+
 
 
 
