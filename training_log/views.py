@@ -10,7 +10,10 @@ from django.views.generic import DetailView
 
 # Create your views here.
 def about(request):
-    return render (request, 'training_log/about.html')
+    return render(request, 'training_log/about.html')
+
+def resources(request):
+    return render(request, 'training_log/resources.html')    
 
 @login_required
 def home(request):
@@ -51,7 +54,6 @@ def log_details(request):
                                             date_posted=date_posted, author=request.user)                                
             for ex in exs:
                 obj = Exercise.objects.get(name=str(ex))
-                print(obj)
                 tlog.exercises.add(obj)
             tlog.save()
             messages.success(request, 'Your training session has been added to your logbook') 
